@@ -60,6 +60,27 @@ class PageServiceProvider extends ServiceProvider
                 return $fileBody;
             });
         });
+        Route::get('/page-design/{id}.json', function () {
+            $id = request()->route('id');
+            echo Cache::remember("page:/pages/{$id}.html", 3600, function () use ($id) {
+                if (!($page = PageDesign::query()->where('state', 'enable')->where(function ($where) use ($id) {
+                    $where->where('sign', $id)->orWhere('id', $id);
+                })->first())) {
+                    return [
+                        'status' => 404,
+                        'msg' => '页面不存在',
+                        'data' => new \ArrayObject()
+                    ];
+                }
+                return [
+                    'status' => 200,
+                    'data' => [
+                        'schema' => $page->getAttribute('schema'),
+                        'title' => $page->getAttribute('title')
+                    ]
+                ];
+            });
+        });
     }
 
 
