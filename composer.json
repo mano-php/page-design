@@ -4,7 +4,7 @@
     "description": "自主搭建页面",
     "type": "library",
     "version": "1.0.0",
-    "keywords": ["owl-admin", "extension"],
+    "keywords": ["extension"],
     "homepage": "https://github.com/mano-code/page",
     "license": "MIT",
     "authors": [
