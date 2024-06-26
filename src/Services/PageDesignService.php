@@ -4,6 +4,7 @@ namespace ManoCode\Page\Services;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
+use ManoCode\Page\Models\PageAcces;
 use ManoCode\Page\Models\PageDesign;
 use ManoCode\Page\Models\PageGroup;
 use Slowlyo\OwlAdmin\Services\AdminService;
@@ -30,6 +31,7 @@ class PageDesignService extends AdminService
         foreach ($items as $key => $item) {
             $items[$key]['state_title'] = ['enable' => '启用', 'disable' => '禁用'][$item['state']];
             $items[$key]['group_title'] = PageGroup::query()->where('id', $item['group_id'])->value('name');
+            $items[$key]['access_num'] = PageAcces::query()->where('page_id', $item->id)->count();
         }
         return compact('items', 'total');
     }

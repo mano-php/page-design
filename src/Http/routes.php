@@ -12,6 +12,10 @@ Route::resource('/page/design', Controllers\PagesDesignController::class);
  * 页面分组
  */
 Route::resource('/page/group', Controllers\PagesGroupController::class);
+/**
+ * 访问日志
+ */
+Route::resource('page_access', \ManoCode\Page\Http\Controllers\PageAccesController::class);
 
 /**
  * 获取树状选择数据

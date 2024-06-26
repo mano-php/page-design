@@ -21,7 +21,6 @@ class PagesDesignController extends AdminController
                     "min-width" => '250px !important;',
                     "border-right" => '0!important;'
                 ]
-
             ])->aside(
             Wrapper::make()
                 ->className('cxd-Crud')
@@ -63,10 +62,12 @@ class PagesDesignController extends AdminController
                 amis()->SelectControl('state_title', '状态')->type('tag'),
                 amis()->SelectControl('group_title', '分组')->type('tag'),
                 amis()->TableColumn('sign', admin_trans('admin.pages.sign'))->searchable(),
+                amis()->TableColumn('access_num', '展示次数'),
                 amis()->TableColumn('updated_at', admin_trans('admin.created_at'))->type('datetime')->sortable(true),
                 $this->rowActions(true, 'lg')
             ]))->asideClassName('mr-3.5 border-r-none');
     }
+
 
     /**
      * 操作列
@@ -84,12 +85,7 @@ class PagesDesignController extends AdminController
 
         return amis()->Operation()->label(admin_trans('admin.actions'))->buttons([
             $this->rowShowButton($dialog, $dialogSize),
-//            amis()->UrlAction()
-//                ->url('${window.location.origin}/pages/${sign}.html')
-//                ->label('跳转')
-//                ->icon('')
-//                ->set('blank',true)
-//                ->level('link'),
+            $this->rowShowLogButton($dialog, $dialogSize),
             amis()->LinkAction()
                 ->link(request()->getSchemeAndHttpHost() . '/pages/${sign}.html')
                 ->label('预览')
@@ -98,6 +94,34 @@ class PagesDesignController extends AdminController
             $this->rowEditButton($dialog, $dialogSize),
             $this->rowDeleteButton(),
         ]);
+    }
+
+    /**
+     * 行详情按钮
+     *
+     * @param bool|string $dialog     是否弹窗, 弹窗: true|dialog, 抽屉: drawer
+     * @param string      $dialogSize 弹窗大小, 默认: md, 可选值: xs | sm | md | lg | xl | full
+     * @param string      $title      弹窗标题 & 按钮文字, 默认: 详情
+     *
+     * @return \Slowlyo\OwlAdmin\Renderers\DialogAction|\Slowlyo\OwlAdmin\Renderers\LinkAction
+     */
+    protected function rowShowLogButton(bool|string $dialog = false, string $dialogSize = 'md', string $title = '')
+    {
+        $button = amis()->LinkAction()->link($this->getShowPath());
+
+        if ($dialog) {
+            if ($dialog === 'drawer') {
+                $button = amis()->DrawerAction()->drawer(
+                    amis()->Drawer()->title('访问日志')->body($this->detail('$id'))->size($dialogSize)
+                );
+            } else {
+                $button = amis()->DialogAction()->dialog(
+                    amis()->Dialog()->title('访问日志')->body((new PageAccesController())->list('page_access?_action=getData&page_id=${id}'))->size($dialogSize)
+                );
+            }
+        }
+
+        return $button->label('访问日志')->icon('fa-regular fa-eye')->level('link');
     }
     /**
      * 行详情按钮
