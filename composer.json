@@ -1,0 +1,33 @@
+{
+    "name": "mano-code/page",
+    "alias": "页面管理",
+    "description": "自主搭建页面",
+    "type": "library",
+    "version": "1.0.0",
+    "keywords": ["owl-admin", "extension"],
+    "homepage": "https://github.com/mano-code/page",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mano",
+            "email": "mano@qq.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.0",
+        "slowlyo/owl-admin": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "ManoCode\\Page\\": "src/"
+        }
+    },
+    "extra": {
+        "owl-admin": "ManoCode\\Page\\PageServiceProvider",
+        "laravel": {
+            "providers": [
+                "ManoCode\\Page\\PageServiceProvider"
+            ]
+        }
+    }
+}
